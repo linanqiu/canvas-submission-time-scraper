@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+  "name": "Canvas Submission Time Scraper",
+  "version": "0.1",
+  "content_scripts": [{
+    "matches": ["https://courseworks2.columbia.edu/courses/*/gradebook/speed_grader*"],
+    "js": ["jquery-2.2.2.min.js", "moment.min.js", "scraper.js"]
+  }],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "browser_action": {
+    "default_icon": "icon.png"
+  },
+  "permissions": ["downloads"]
+}
