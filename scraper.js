@@ -37,7 +37,7 @@ chrome.runtime.onMessage.addListener(
 
       function parseDateTime(dateTimeArray) {
         return dateTimeArray.map(function (dateTimeString) {
-          return moment(dateTimeString, 'MMM D at h:ma');
+          return moment(dateTimeString, 'MMM D at h:ma').format('M/D/YYYY HH:mm:ss');
         });
       }
 
