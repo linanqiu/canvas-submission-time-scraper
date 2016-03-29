@@ -54,14 +54,25 @@ chrome.runtime.onMessage.addListener(
             }).get();
           }
           submission = parseDateTime(submission);
+          // get only latest submission time
+          submission = submission.sort(function (a, b) {
+            return new Date(b) - new Date(a);
+          })[0];
         }
 
 
         var studentName = $('#students_selectmenu-button > span.ui-selectmenu-status > span.ui-selectmenu-item-header').text();
-        document.querySelector('#gradebook_header > form > div.left > a.next').click();
+        var studentId = $('#avatar_image').attr('src').replace('/images/users/', '').split('-')[0].trim();
 
         if (!data.hasOwnProperty(studentName)) {
-          data[studentName] = submission;
+          data[studentName] = {
+            submissionTime: submission,
+            studentId: studentId
+          };
+          
+          // click next
+          document.querySelector('#gradebook_header > form > div.left > a.next').click();
+
           domReady(studentName, function () {
             scrape();
           });
