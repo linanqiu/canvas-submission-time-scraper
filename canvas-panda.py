@@ -89,6 +89,8 @@ for submission_time in submission_times:
   submission_time['uni'] = user['uni']
   submission_time['name'] = user['name']
 
+logger.info('Writing CSV')
+
 with open('submissions_%s_%s.csv' % (args.course_id, args.assignment_id), 'w') as csv_file:
   writer = csv.DictWriter(csv_file, fieldnames=submission_times[0].keys())
 

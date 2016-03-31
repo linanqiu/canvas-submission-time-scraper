@@ -22,7 +22,7 @@ Log in to courseworks2 at [https://courseworks2.columbia.edu/](https://coursewor
 
 And get yourself a new access token. **Copy it down**.
 
-![Get yourself a new access token.](./screenshots/screenshot_5.png)
+![Get yourself a new access token.](./screenshots/screenshot_6.png)
 
 #### Profit
 
