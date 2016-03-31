@@ -78,3 +78,22 @@ Now click on the green panda and wait. **Chrome may tell you that the page has f
 A "save as" dialog will pop up asking you to download `submission_times.csv`. Download `submission_times.csv` and profit.
 
 Unfortunately, we are not able to cross reference UNIs from student names and student IDs because Canvas. You'll have to cross reference them on your own from gradebook exports. That's trivial using either spreadsheet functions (`VLOOKUP`) or a simple script.
+
+          .;;.
+         /;;;;\  ___      .;;.
+        |;(;;;-""   `'-.,;;;;;\
+         \;'            ';;;);/
+         /                \;;'
+        /    .;.   .;.     \
+        |   ;;o;; ;;o;;    |
+        ;   '"-'` `'-"'    |
+        /\      ._.       /
+      ;;;;;_   ,_Y_,   _.'
+     /;;;;;\`--.___.--;.
+    /|;;;;;;;.__.;;;.  \\
+   ;  \;;;;;;;;;;;;;;\  ;\__  .;.
+   |   ';;;;;;;;=;;;;'  |-__;;;;/
+   |     `""`  .---._  /;/;;\;;/
+  / ;         /;;;;;;;-;/;;/|;/
+  \_,\       |;;;;;;;;;;;;| |
+      '-...--';;;;;;;;;;;;\/
