@@ -8,7 +8,44 @@ This is what we do.
 
 ## Quick Start
 
-### Installation
+There are two ways to do this. The first **via Canvas API in Python** and the second **via a Chrome Extension that screen scrapes**. Obviously the first is superior, though I coded the second one earlier. The Chrome extension will no longer be updated / maintained.
+
+### Python
+
+#### Getting an Access Token
+
+Download `canvas-panda.py` in this repo. Why did I name it panda? Because pandas are cute.
+
+Log in to courseworks2 at [https://courseworks2.columbia.edu/](https://courseworks2.columbia.edu/) and get yourself an **access token** by going to settings:
+
+![Go To Settings](./screenshots/screenshot_5.png)
+
+And get yourself a new access token. **Copy it down**.
+
+![Get yourself a new access token.](./screenshots/screenshot_5.png)
+
+#### Profit
+
+Now get submission times by running `canvas-panda.py` with the following arguments:
+
+```bash
+$ python canvas-panda.py <API_KEY> <Course_ID> <Assignment_ID>
+```
+
+You can find the Course ID and Assignment ID from the URL of the assignment: `https://courseworks2.columbia.edu/courses/xxxx/assignments/yyyy` where `xxxx` is the course ID and `yyyy` is the assignment ID.
+
+The results will be saved in a .csv file these columns:
+
+- Student's name
+- Student's UNI
+- Students `user_id` (used by Canvas)
+- Student's submission time in Google Spreadsheet's default format
+
+### Chrome Extension
+
+**THIS WILL NO LONGER BE UPDATED AND IS NOT THE PREFERRED WAY OF DOING THIS.** Please use the Python script above.
+
+#### Installation
 
 To install this **Chrome Extension**
 
@@ -18,7 +55,7 @@ To install this **Chrome Extension**
 - Click on `Load unpacked extension...` and select the folder for the repo
 - Green panda should appear and you can use it as described above.
 
-### Usage
+#### Usage
 
 Navigate to **Speed Grader** for the homework you'd like to export.
 
