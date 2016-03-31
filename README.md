@@ -14,7 +14,7 @@ There are two ways to do this. The first **via Canvas API in Python** and the se
 
 #### Getting an Access Token
 
-Download `canvas-panda.py` in this repo. Why did I name it panda? Because pandas are cute.
+Download `canvas-panda.py` in this repo. Why did I name it panda? Because I am a panda.
 
 Log in to courseworks2 at [https://courseworks2.columbia.edu/](https://courseworks2.columbia.edu/) and get yourself an **access token** by going to settings:
 
