@@ -41,6 +41,8 @@ The results will be saved in a .csv file these columns:
 - Students `user_id` (used by Canvas)
 - Student's submission time in Google Spreadsheet's default format
 
+**If you have a large class (above 100 students), consider using the async version of this. Do the same as above but run `canvas-panda-async.py` instead.**
+
 ### Chrome Extension
 
 **THIS WILL NO LONGER BE UPDATED AND IS NOT THE PREFERRED WAY OF DOING THIS.** Please use the Python script above.
