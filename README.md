@@ -6,6 +6,10 @@ Canvas **currently does not export student assignment submission times**. That c
 
 This is what we do.
 
+## Dependencies
+
+- Python, with module [requests](https://github.com/kennethreitz/requests) ( + [grequests](https://github.com/kennethreitz/grequests) if using async version)
+
 ## Quick Start
 
 There are two ways to do this. The first **via Canvas API in Python** and the second **via a Chrome Extension that screen scrapes**. Obviously the first is superior, though I coded the second one earlier. The Chrome extension will no longer be updated / maintained.
@@ -29,10 +33,10 @@ And get yourself a new access token. **Copy it down**.
 Now get submission times by running `canvas-panda.py` with the following arguments:
 
 ```bash
-$ python canvas-panda.py <API_KEY> <Course_ID> <Assignment_ID>
+$ python canvas-panda.py [-u <canvas_url>] <API_KEY> <Course_ID> <Assignment_ID>
 ```
 
-You can find the Course ID and Assignment ID from the URL of the assignment: `https://courseworks2.columbia.edu/courses/xxxx/assignments/yyyy` where `xxxx` is the course ID and `yyyy` is the assignment ID.
+You can find the Course ID and Assignment ID from the URL of the assignment: `https://<canvas_url>/courses/xxxx/assignments/yyyy` where `xxxx` is the course ID and `yyyy` is the assignment ID.
 
 The results will be saved in a .csv file these columns:
 
