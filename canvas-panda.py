@@ -15,11 +15,16 @@ parser = argparse.ArgumentParser(
 parser.add_argument('canvas_api_key', metavar='K', type=str,
                     help='Canvas API Key obtained from "settings"')
 parser.add_argument('course_id', metavar='C', type=int,
-                    help='Course ID. e.g. xxxx in https://courseworks2.columbia.edu/courses/xxxx/assignments/yyyy')
+                    help='Course ID. e.g. xxxx in https://<canvas_url>/courses/xxxx/assignments/yyyy')
 parser.add_argument('assignment_id', metavar='A', type=int,
-                    help='Course ID. e.g. yyyy in https://courseworks2.columbia.edu/courses/xxxx/assignments/yyyy')
+                    help='Course ID. e.g. yyyy in https://<canvas_url>/courses/xxxx/assignments/yyyy')
+parser.add_argument('-u', '--canvas_url', type=str,
+                    help='Canvas base URL (default: courseworks2.columbia.edu)')
 
 args = parser.parse_args()
+
+if not args.canvas_url:
+    args.canvas_url = 'courseworks2.columbia.edu'
 
 # logging
 
@@ -35,7 +40,7 @@ logger.info("running %s" % ' '.join(sys.argv))
 
 HEADERS = {'Authorization': 'Bearer ' + args.canvas_api_key}
 
-URL_BASE = 'https://courseworks2.columbia.edu/api/v1/'
+URL_BASE = 'https://' + args.canvas_url + '/api/v1/'
 
 # map functions
 
