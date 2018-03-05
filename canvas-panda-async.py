@@ -93,20 +93,15 @@ def parse_uni(resp, **kwargs):
 logger.info('Cross referencing user_ids to unis')
 
 url_users = [URL_BASE + 'courses/%d/users/%d' % (args.course_id, submission_time['user_id']) for submission_time in submission_times]
-
+#
 reqs = (grequests.get(url_user, params={'include': 'email'}, headers=HEADERS, hooks={'response': parse_uni}) for url_user in url_users)
 resps = grequests.map(reqs)
 
 logger.info('Writing CSV')
 
-for submission_time in submission_times:
-  user_id = submission_time['user_id']
-  submission_time['uni'] = id_uni_name_map[user_id]['uni']
-  submission_time['name'] = id_uni_name_map[user_id]['name']
-
 with open('submissions_%s_%s.csv' % (args.course_id, args.assignment_id), 'w') as csv_file:
-  writer = csv.DictWriter(csv_file, fieldnames=submission_times[0].keys())
+    writer = csv.DictWriter(csv_file, fieldnames=submission_times[0].keys())
 
-  writer.writeheader()
-  for submission_time in submission_times:
-    writer.writerow(submission_time)
+    writer.writeheader()
+    for submission_time in submission_times:
+        writer.writerow(submission_time)
