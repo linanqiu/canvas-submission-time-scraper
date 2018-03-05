@@ -16,7 +16,6 @@ DATE_FORMAT = '%-d/%-m/%Y %-H:%-M:%-S'  # RMIT Uni (Australia)
 CANVAS_URL = 'rmit.instructure.com'
 
 
-
 # Process URL, parse doc with function parse_func and collect data in collector
 def map_canvas(url, parse_func, collector, page=1):
   web_response = requests.get(url, params={'page': page}, headers=HEADERS)
