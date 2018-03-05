@@ -11,78 +11,75 @@ This is what we do.
 - Python >=2.7, with module [requests](https://github.com/kennethreitz/requests) ( + [grequests](https://github.com/kennethreitz/grequests) if using async version)
     - Resolve dependencies via: `pip2/pip3 install --user -r requirements.txt`
 
-## Quick Start
 
-There are two ways to do this. The first **via Canvas API in Python** and the second **via a Chrome Extension that screen scrapes**. Obviously the first is superior, though I coded the second one earlier. The Chrome extension will no longer be updated / maintained.
+### Usage
 
-### Python
+First of all, clone this repo to be able to run `canvas-panda.py`. Why did I name it panda? Because I am a panda.
 
 #### Getting an Access Token
 
-Download `canvas-panda.py` in this repo. Why did I name it panda? Because I am a panda.
+Obtain the Canvas **access token** from your user Settings .
 
-Log in to courseworks2 at [https://courseworks2.columbia.edu/](https://courseworks2.columbia.edu/) and get yourself an **access token** by going to settings:
+For example, in Columbia Uni:
+
+1. Log in to courseworks2 at [https://courseworks2.columbia.edu/](https://courseworks2.columbia.edu/) and get yourself an **access token** by going to settings:
 
 ![Go To Settings](./screenshots/screenshot_5.png)
 
-And get yourself a new access token. **Copy it down**.
+2. And get yourself a new access token. **Copy it down**.
 
 ![Get yourself a new access token.](./screenshots/screenshot_6.png)
 
-#### Profit
 
-Now get submission times by running `canvas-panda.py` with the following arguments:
+#### Running the Script
 
 ```bash
-$ python canvas-panda.py [-u <canvas_url>] <API_KEY> <Course_ID> <Assignment_ID>
+$ python3 canvas-panda-async.py -h
+
+usage: canvas-panda-async.py [-h] [-u CANVAS_URL] [--timezone TIMEZONE]
+                             [--date-format {col_US,rmit_AUS}]
+                             canvas_api_key course_id assignment_id
+
+Grabs submission times for an assignment in a course.
+
+positional arguments:
+  canvas_api_key        Canvas API Key obtained from "settings"
+  course_id             Course ID. e.g. xxxx in
+                        https://<canvas_url>/courses/xxxx/assignments/yyyy
+  assignment_id         Course ID. e.g. yyyy in
+                        https://<canvas_url>/courses/xxxx/assignments/yyyy
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -u CANVAS_URL, --canvas_url CANVAS_URL
+                        Canvas base URL (default: rmit.instructure.com)
+  --timezone TIMEZONE   Timezone to used (default: Australia/Melbourne) (see h
+                        ttp://en.wikipedia.org/wiki/List_of_tz_database_time_z
+                        ones)
+  --date-format {col_US,rmit_AUS}
+                        Format of the submission date+time to be used
+                        (default: %-d/%-m/%Y %-H:%-M:%-S)
 ```
 
 You can find the Course ID and Assignment ID from the URL of the assignment: `https://<canvas_url>/courses/xxxx/assignments/yyyy` where `xxxx` is the course ID and `yyyy` is the assignment ID.
 
-The results will be saved in a .csv file these columns:
 
-- Student's name
-- Student's UNI
+For example:
+
+```bash
+python3 canvas-panda-async.py -u rmit.instructure.com --date-format col_US  \
+    --timezone Canada/Central 95952pcHw2i8gJB9AGjs5XphYS5SZmR0AXWgWuDm05Nmcqk4uL 12533 176110
+```
+
+The results will be saved in a .csv file with these columns:
+
+- Student's name (if available)
+- Student's UNI (if available)
 - Students `user_id` (used by Canvas)
-- Student's submission time in Google Spreadsheet's default format
+- Student's submission time (following date format used)
 
-**If you have a large class (above 100 students), consider using the async version of this. Do the same as above but run `canvas-panda-async.py` instead.**
 
-### Chrome Extension
-
-**THIS WILL NO LONGER BE UPDATED AND IS NOT THE PREFERRED WAY OF DOING THIS.** Please use the Python script above.
-
-#### Installation
-
-To install this **Chrome Extension**
-
-- Download this entire repo as a `.zip` and unpack it
-- Go to `chrome://extensions` on Chrome
-- Check `Developer Mode`
-- Click on `Load unpacked extension...` and select the folder for the repo
-- Green panda should appear and you can use it as described above.
-
-#### Usage
-
-Navigate to **Speed Grader** for the homework you'd like to export.
-
-That is, go to **Assignments** on the side bar.
-
-![Assignments](./screenshots/screenshot_1.png)
-
-Click on the homework you'd want to export.
-
-![Select homework](./screenshots/screenshot_2.png)
-
-Click on **Speed Grader** and allow the page to load.
-
-![Speed Grader](./screenshots/screenshot_3.png)
-
-Now click on the green panda and wait. **Chrome may tell you that the page has frozen and tell you that you should kill it. Don't. It is simply clicking through all (possibly hundreds) of students to get their submission times**.
-
-![Speed Grader](./screenshots/screenshot_4.png)
-
-A "save as" dialog will pop up asking you to download `submission_times.csv`. Download `submission_times.csv` and profit.
+## Issues
 
 Unfortunately, we are not able to cross reference UNIs from student names and student IDs because Canvas. You'll have to cross reference them on your own from gradebook exports. That's trivial using either spreadsheet functions (`VLOOKUP`) or a simple script.
 
