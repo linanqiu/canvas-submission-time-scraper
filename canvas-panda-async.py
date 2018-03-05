@@ -1,21 +1,21 @@
-# parse args
-from __future__ import absolute_import, division, print_function, unicode_literals
-
 import argparse
 import requests
 import grequests
 import logging
 import os
 import sys
-import re
 import csv
+
 import datetime
 import iso8601
 from pytz import timezone
 
 # default values
 TIMEZONE = 'Australia/Melbourne'
+DATE_FORMAT = '%-d/%-m/%Y %-H:%-M:%-S'  # RMIT Uni (Australia)
 CANVAS_URL = 'rmit.instructure.com'
+
+
 
 # Process URL, parse doc with function parse_func and collect data in collector
 def map_canvas(url, parse_func, collector, page=1):
@@ -23,19 +23,23 @@ def map_canvas(url, parse_func, collector, page=1):
 
   web_response_json = web_response.json() # transform response into json-encoded content
   logging.info("Processing page no. %d" % page)
-  if len(web_response_json) > 0 and page < 4:
+  if len(web_response_json) > 0:
     collector.extend([parse_func(submission) for submission in web_response_json])
     map_canvas(url, parse_func, collector, page + 1)
 
 
 def parse_submissions(response_json):
     # Original code to covert '%Y-%m-%dT%H:%M:%SZ' to ''%-m/%-d/%Y %-H:%-M:%-S' (no timezone reasoning)
-    submitted_at = datetime.datetime.strptime(response_json['submitted_at'], '%Y-%m-%dT%H:%M:%SZ').strftime(
-        '%-m/%-d/%Y %-H:%-M:%-S') if response_json['submitted_at'] is not None else None
+    # submitted_at = datetime.datetime.strptime(response_json['submitted_at'], '%Y-%m-%dT%H:%M:%SZ').strftime(
+    #     '%-m/%-d/%Y %-H:%-M:%-S') if response_json['submitted_at'] is not None else None
 
     # New version using iso8601 (https://en.wikipedia.org/wiki/ISO_8601) time standard and timezones
-    submitted_at = iso8601.parse_date(response_json['submitted_at']).astimezone(timezone(TIMEZONE)) if response_json[
-                                                                                              'submitted_at'] is not None else None
+    if response_json['submitted_at'] is not None:
+        submitted_at2 = iso8601.parse_date(response_json['submitted_at']).astimezone(timezone(TIMEZONE))
+        submitted_at =  submitted_at2.strftime(DATE_FORMAT)
+    else:
+        submitted_at = None
+
     return {'user_id': response_json['user_id'], 'submitted_at': submitted_at}
 
 
@@ -58,6 +62,23 @@ def parse_uni(resp, **kwargs):
 
 
 if __name__ == '__main__':
+
+
+    date_formats = {
+        'col_US': '%-m/%-d/%Y %-H:%-M:%-S',   # Columbia uni (US)
+        'rmit_AUS': '%-d/%-m/%Y %-H:%-M:%-S'  # RMIT Uni (Australia),
+    }
+
+
+    # Logging configuration
+    logger = logging.getLogger('root')
+    program = os.path.basename(sys.argv[0])
+    logger = logging.getLogger(program)
+    logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
+    logging.root.setLevel(level=logging.INFO)
+    logger.info("running %s" % ' '.join(sys.argv))
+
+
     parser = argparse.ArgumentParser(
         description='Grabs submission times for an assignment in a course.')
     parser.add_argument(
@@ -91,17 +112,21 @@ if __name__ == '__main__':
         default = TIMEZONE,
         help='Timezone to used (default: %(default)s) (see http://en.wikipedia.org/wiki/List_of_tz_database_time_zones)'
     )
+    parser.add_argument(
+        '--date-format',
+        type=str,
+        default = DATE_FORMAT,
+        choices=list(date_formats.keys()),
+        help='Format of the submission date+time to be used (default: %(default)s)'
+    )
+
     args = parser.parse_args()
 
+    # Set timezone and date format
     TIMEZONE = args.timezone
+    DATE_FORMAT = date_formats[args.date_format]
+    logger.info("Using timezone %s and date format %s" % (str(TIMEZONE), str(DATE_FORMAT)))
 
-    # Logging configuration
-    logger = logging.getLogger('root')
-    program = os.path.basename(sys.argv[0])
-    logger = logging.getLogger(program)
-    logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s')
-    logging.root.setLevel(level=logging.INFO)
-    logger.info("running %s" % ' '.join(sys.argv))
 
     # Construct headers
     HEADERS = {'Authorization': 'Bearer ' + args.canvas_api_key}
@@ -128,8 +153,10 @@ if __name__ == '__main__':
 
     logger.info('Writing CSV')
     with open('submissions_%s_%s.csv' % (args.course_id, args.assignment_id), 'w') as csv_file:
-        writer = csv.DictWriter(csv_file, fieldnames=submission_times[0].keys())
+        # writer = csv.DictWriter(csv_file, fieldnames=submission_times[0].keys())
+        writer = csv.DictWriter(csv_file, fieldnames=['user_id', 'submitted_at'])
 
         writer.writeheader()
         for submission_time in submission_times:
             writer.writerow(submission_time)
+            # writer.writerow({'user_id' : submission_time['user_id'], 'submitted_at' : submission_time['submitted_at']})
