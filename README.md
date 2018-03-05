@@ -8,7 +8,8 @@ This is what we do.
 
 ## Dependencies
 
-- Python, with module [requests](https://github.com/kennethreitz/requests) ( + [grequests](https://github.com/kennethreitz/grequests) if using async version)
+- Python >=2.7, with module [requests](https://github.com/kennethreitz/requests) ( + [grequests](https://github.com/kennethreitz/grequests) if using async version)
+    - Resolve dependencies via: `pip2/pip3 install --user -r requirements.txt`
 
 ## Quick Start
 

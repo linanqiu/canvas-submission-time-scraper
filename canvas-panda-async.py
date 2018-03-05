@@ -23,7 +23,7 @@ def map_canvas(url, parse_func, collector, page=1):
 
   web_response_json = web_response.json() # transform response into json-encoded content
   logging.info("Processing page no. %d" % page)
-  if len(web_response_json) > 0:
+  if len(web_response_json) > 0 and page < 4:
     collector.extend([parse_func(submission) for submission in web_response_json])
     map_canvas(url, parse_func, collector, page + 1)
 
@@ -36,7 +36,7 @@ def parse_submissions(response_json):
     # New version using iso8601 (https://en.wikipedia.org/wiki/ISO_8601) time standard and timezones
     submitted_at = iso8601.parse_date(response_json['submitted_at']).astimezone(timezone(TIMEZONE)) if response_json[
                                                                                               'submitted_at'] is not None else None
-    return {'submitted_at': submitted_at, 'user_id': response_json['user_id']}
+    return {'user_id': response_json['user_id'], 'submitted_at': submitted_at}
 
 
 
